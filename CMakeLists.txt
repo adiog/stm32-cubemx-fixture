@@ -20,6 +20,7 @@ SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 ###############################################################################
 # collect sources
 FILE(GLOB_RECURSE ASM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-generated/**.s)
+FILE(GLOB_RECURSE C_SOURCES_FIX ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-fixture/Src/**.c)
 FILE(GLOB_RECURSE C_SOURCES_SRC ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-generated/Src/**.c)
 FILE(GLOB_RECURSE C_SOURCES_DRV ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-generated/Drivers/STM32F1xx_HAL_Driver/Src/**.c)
 FILE(GLOB_RECURSE CPP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/source/**.cpp)
@@ -33,8 +34,7 @@ INCLUDE_DIRECTORIES(
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-generated/Drivers/CMSIS/Device/ST/STM32F1xx/Include
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-generated/Drivers/CMSIS/Include
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-fixture/Inc
-        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-fixture/source
-)
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-fixture/source)
 
 
 ###############################################################################
@@ -46,16 +46,18 @@ SET(CMAKE_CXX_COMPILER ${PREFIX}g++)
 SET(OBJCOPY_COMMAND ${PREFIX}objcopy)
 SET(SIZE_COMMAND ${PREFIX}size)
 
-
 SET(CPU "-mcpu=cortex-m3")
+SET(FPU "")
+SET(FLOAT-ABI "")
 SET(MCU "${CPU} -mthumb ${FPU} ${FLOAT-ABI}")
-SET(AS_DEFS "")
-SET(C_DEFS "-DUSE_HAL_DRIVER -DSTM32F103xB")
-SET(CPP_DEFS "-DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DUSE_HAL_DRIVER -DSTM32F103xB")
+SET(COMMON_DEFS "-DUSE_HAL_DRIVER -DSTM32F103xB")
+SET(AS_DEFS "${COMMON_DEFS}")
+SET(C_DEFS "${COMMON_DEFS}")
+SET(CPP_DEFS "${COMMON_DEFS}")
 SET(AS_INCLUDES "")
 
-SET(CMAKE_ASM_FLAGS " -x assembler-with-cpp ${MCU} ${AS_DEFS} ${AS_INCLUDES} ${OPT} -Wall -fdata-sections -ffunction-sections")
-SET(CMAKE_C_FLAGS "-g -gdwarf-2 ${MCU} ${C_DEFS} ${C_INCLUDES} ${OPT} -Wall -fdata-sections -ffunction-sections")
+SET(CMAKE_ASM_FLAGS " -x assembler-with-cpp ${MCU} ${AS_DEFS} ${AS_INCLUDES} ${OPT} -Og -Wall -fdata-sections -ffunction-sections")
+SET(CMAKE_C_FLAGS "${C_DEFS} -g -gdwarf-2 -Og ${MCU} ${C_INCLUDES} ${OPT} -Wall -fdata-sections -ffunction-sections")
 SET(CMAKE_CXX_FLAGS "-g -gdwarf-2 -std=gnu++14 -mthumb ${CPU} ${CPP_DEFS} ${C_INCLUDES} ${OPT} -fstack-usage -fno-threadsafe-statics   -Wall -ffunction-sections -O0")
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MMD -MP")
@@ -64,8 +66,13 @@ SET(LDSCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-generated/STM32F103C8Tx_FLASH.ld
 
 SET(CMAKE_EXE_LINKER_FLAGS "${MCU} -specs=nano.specs -T${LDSCRIPT} ${LIBDIR} ${LIBS} -Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.map,--cref -Wl,--gc-sections")
 
-ADD_EXECUTABLE(${TARGET_ELF} ${C_SOURCES_SRC} ${C_SOURCES_DRV} ${CPP_SOURCES_SRC} ${ASM_SOURCES})
-TARGET_LINK_LIBRARIES(${TARGET_ELF} nosys c m)
+ADD_EXECUTABLE(${TARGET_ELF}
+        ${ASM_SOURCES}
+        ${C_SOURCES_SRC}
+        ${C_SOURCES_DRV}
+        ${C_SOURCES_FIX}
+        ${CPP_SOURCES})
+TARGET_LINK_LIBRARIES(${TARGET_ELF} c m nosys)
 
 ###############################################################################
 SET(BUILD_HEX_COMMAND ${OBJCOPY_COMMAND} -O ihex ${TARGET_ELF} ${TARGET_HEX})

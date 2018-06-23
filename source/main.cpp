@@ -5,6 +5,5 @@
 int main(void)
 {
     cubemx_fixture_main();
-
 }
 
