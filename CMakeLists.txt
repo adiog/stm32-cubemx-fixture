@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
-PROJECT(stm32-mpu ASM C CXX)
+PROJECT(stm32-cubemx-fixture ASM C CXX)
 
 SET(TARGET ${PROJECT_NAME})
 
@@ -58,11 +58,11 @@ SET(AS_INCLUDES "")
 
 SET(CMAKE_ASM_FLAGS " -x assembler-with-cpp ${MCU} ${AS_DEFS} ${AS_INCLUDES} ${OPT} -Og -Wall -fdata-sections -ffunction-sections")
 SET(CMAKE_C_FLAGS "${C_DEFS} -g -gdwarf-2 -Og ${MCU} ${C_INCLUDES} ${OPT} -Wall -fdata-sections -ffunction-sections")
-SET(CMAKE_CXX_FLAGS "-g -gdwarf-2 -std=gnu++14 -mthumb ${CPU} ${CPP_DEFS} ${C_INCLUDES} ${OPT} -fstack-usage -fno-threadsafe-statics   -Wall -ffunction-sections -O0")
+SET(CMAKE_CXX_FLAGS "-g -gdwarf-2 -std=gnu++14 -mthumb ${CPU} ${CPP_DEFS} ${C_INCLUDES} ${OPT} -fstack-usage -fno-threadsafe-statics -Wall -ffunction-sections -O0")
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MMD -MP")
 
-SET(LDSCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-generated/STM32F103C8Tx_FLASH.ld)
+SET(LDSCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/cubemx-fixture/STM32F103C8Tx_FLASH.ld)
 
 SET(CMAKE_EXE_LINKER_FLAGS "${MCU} -specs=nano.specs -T${LDSCRIPT} ${LIBDIR} ${LIBS} -Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.map,--cref -Wl,--gc-sections")
 
@@ -107,4 +107,3 @@ ADD_CUSTOM_TARGET(
   DEPENDS
     ${TARGET_BIN}
 )
-
