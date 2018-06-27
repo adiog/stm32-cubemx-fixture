@@ -52,3 +52,8 @@ echo "   libnosys.a"
 echo ")"
 ) >> ${CUBEMX_FIXTURE_LD_SCRIPT}
 
+(
+echo "GROUP ("
+echo "   librdimon.a"
+echo ")"
+) >> ${CUBEMX_FIXTURE_WITH_SEMIHOST_LD_SCRIPT}
