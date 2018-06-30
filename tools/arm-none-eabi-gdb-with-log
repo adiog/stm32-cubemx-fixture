@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo $(date +"%y-%m-%d %H:%M:%S.%N") arm-none-eabi-gdb "$@" >> ~/arm-none-eabi-gdb.log
+arm-none-eabi-gdb "$@"
+

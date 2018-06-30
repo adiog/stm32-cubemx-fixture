@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+while True:
+  line = input()
+  print(line)
+  if '-target-select' in line:
+    print('-interpreter-exec "monitor arm semihosting enable"')
+

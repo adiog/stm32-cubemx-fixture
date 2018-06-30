@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cat | arm-none-eabi-gdb-semihost-enable | sudo tee ~/arm-none-eabi-gdb-semihost.`date +%H%M%S`.log | arm-none-eabi-gdb-with-log "$@"
+
