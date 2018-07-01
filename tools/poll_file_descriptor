@@ -1,0 +1,19 @@
+#!/bin/bash
+
+PROCESS=$1
+FILE_DESCRIPTOR=$2
+SLEEP_SECONDS=$3
+MESSAGE=$4
+
+while true;
+do
+    pidof ${PROCESS} > /dev/null                                                                                      \
+        && test -e /proc/`pidof ${PROCESS}`/fd/${FILE_DESCRIPTOR}                                                     \
+            && echo $(date +"%y-%m-%d %H:%M:%S.%N") "Opening /proc/`pidof ${PROCESS}`/fd/${FILE_DESCRIPTOR}.."        \
+            && echo ""                                                                                                \
+            && (tail -f /proc/`pidof ${PROCESS}`/fd/${FILE_DESCRIPTOR} || true)                                       \
+            || echo $(date +"%y-%m-%d %H:%M:%S.%N") "File Descripton has not yet been opened.."                                                       \
+        || echo $(date +"%y-%m-%d %H:%M:%S.%N") "${PROCESS} is not running.."
+    sleep ${SLEEP_SECONDS}
+    echo $(date +"%y-%m-%d %H:%M:%S.%N") ${MESSAGE}
+done

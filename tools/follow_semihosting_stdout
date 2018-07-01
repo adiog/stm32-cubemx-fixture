@@ -1,0 +1,5 @@
+#!/bin/bash
+
+[[ $1 == --start ]] && $(dirname $0)/poll_file_descriptor st-util 10 5 'Polling on st-link semihosting stdout..'
+[[ $1 == --stop ]] && pkill -f poll_file_descriptor || true
+[[ $1 == --follow ]] && while true; do screen -r st-stdout || sleep 5; done;

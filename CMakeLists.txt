@@ -198,7 +198,11 @@ ADD_CUSTOM_TARGET(
   COMMAND
     killall -9 st-util || true
   COMMAND
-    screen -S st-util -d -m bash -c st-util --semihosting
+    screen -S st-util -d -m bash -c "st-util --semihosting"
+  COMMAND
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/follow_semihosting_stdout --stop
+  COMMAND
+    screen -S st-stdout -d -m bash -c "${CMAKE_CURRENT_SOURCE_DIR}/tools/follow_semihosting_stdout --start"
   COMMAND
     echo ${CMAKE_CURRENT_SOURCE_DIR} > /tmp/cmake_current_source_dir
   WORKING_DIRECTORY

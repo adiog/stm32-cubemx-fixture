@@ -8,16 +8,26 @@
 extern "C" {
 __weak void initialise_monitor_handles(void) {}
 }
-#else
-//#pragma import(__use_no_semihosting)
 #endif
 
 int setup()
 {
+#ifdef SEMIHOST
+    printf("Hello World!\n");
+
+    auto f = fopen("/tmp/semihost.txt", "w");
+    fprintf(f, "Hello Semihost File\n");
+    fclose(f);
+#endif
 }
 
 int loop()
 {
+#ifdef SEMIHOST
+    static int loopCounter = 0;
+    printf("Hello Semihost (%x)!\n", loopCounter);
+    loopCounter++;
+#endif
 }
 
 int main()
@@ -26,13 +36,7 @@ int main()
     initialise_monitor_handles();
 #endif
 
-
     cubemx_fixture_main();
-
-    printf("Hello World\n");
-    auto f = fopen("/tmp/semihost.txt", "w");
-    fprintf(f, "HelloWorld");
-    fclose(f);
 
     setup();
 
