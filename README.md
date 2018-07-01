@@ -1,5 +1,5 @@
 This repository contains the initial project setup for STM32F103CB.
-![stm31f103-pinout-diagram](https://github.com/adiog/stm32-cubemx-fixture/raw/master/docs/stm31f103-pinout-diagram.gif "STM32F103 Pinout Diagram")
+![stm32f103-pinout-diagram](https://github.com/adiog/stm32-cubemx-fixture/raw/master/docs/stm32f103-pinout-diagram.gif "STM32F103 Pinout Diagram")
 
 # Goals:
 - work with CLion to edit, flash and debug the code.
