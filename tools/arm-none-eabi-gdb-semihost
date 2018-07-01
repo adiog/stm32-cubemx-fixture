@@ -1,4 +1,13 @@
 #!/bin/bash
 
-cat | arm-none-eabi-gdb-semihost-enable | sudo tee ~/arm-none-eabi-gdb-semihost.`date +%H%M%S`.log | arm-none-eabi-gdb-with-log "$@"
+if [[ $1 == "--version" ]];
+then
+    arm-none-eabi-gdb --version
+else
+    tee /tmp/arm-none-eabi-gdb.input.log | \
+    arm-none-eabi-gdb \
+      --init-command=`cat /tmp/cmake_current_source_dir`/.gdbinit \
+      "$@" | \
+    tee /tmp/arm-none-eabi-gdb.output.log
+fi
 

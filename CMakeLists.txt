@@ -182,8 +182,8 @@ ADD_CUSTOM_TARGET(
     killall -9 st-util || true
   COMMAND
     screen -S st-util -d -m bash -c st-util
-#  COMMAND
-#    ${GDB_COMMAND} -ex "target remote localhost:4242" ${TARGET_ELF}
+  COMMAND
+    echo ${CMAKE_CURRENT_SOURCE_DIR} > /tmp/cmake_current_source_dir
   WORKING_DIRECTORY
     ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS
@@ -199,8 +199,8 @@ ADD_CUSTOM_TARGET(
     killall -9 st-util || true
   COMMAND
     screen -S st-util -d -m bash -c st-util --semihosting
-#  COMMAND
-#    ${GDB_COMMAND} -ex "target remote localhost:4242" -ex "monitor semihosting enable" -ex "continue" ${TARGET_SEMIHOST_ELF}
+  COMMAND
+    echo ${CMAKE_CURRENT_SOURCE_DIR} > /tmp/cmake_current_source_dir
   WORKING_DIRECTORY
     ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS
